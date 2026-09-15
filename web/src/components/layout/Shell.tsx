@@ -4,7 +4,7 @@ import {
 } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
-import { SearchButton } from '@/components/layout/PeopleSearch'
+import { SearchButton } from '@/components/layout/CommandPalette'
 import { SwapBell } from '@/components/layout/SwapBell'
 import { ThemeToggle } from '@/components/layout/ThemeToggle'
 import { Avatar } from '@/components/ui/avatar'
@@ -12,7 +12,7 @@ import { Drawer } from '@/components/ui/drawer'
 import { useAuth } from '@/context/AuthContext'
 import { cn } from '@/lib/utils'
 
-interface NavItem {
+export interface NavItem {
   to: string
   label: string
   icon: LucideIcon
@@ -22,7 +22,14 @@ interface NavItem {
   admin?: boolean
 }
 
-const NAV: { group: string; items: NavItem[] }[] = [
+/**
+ * Every page, in the order the column lists them.
+ *
+ * Exported because the command palette goes to the same places, and a second list of
+ * them would be a second place to forget a page. The admin flag travels with the
+ * item for the same reason: whoever draws it filters it the same way.
+ */
+export const NAV: { group: string; items: NavItem[] }[] = [
   { group: 'PLANEAMENTO', items: [
     { to: '/', label: 'Dashboard', icon: LayoutDashboard, end: true },
     { to: '/plano', label: 'Plano', icon: CalendarDays, admin: true },

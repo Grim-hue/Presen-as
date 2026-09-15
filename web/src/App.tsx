@@ -1,6 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { Toaster } from 'sonner'
-import { PeopleSearch } from '@/components/layout/PeopleSearch'
+import { CommandPalette } from '@/components/layout/CommandPalette'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { AuthProvider, useAuth } from '@/context/AuthContext'
 import { SearchProvider } from '@/context/SearchContext'
@@ -61,7 +61,7 @@ function Routed() {
         )}
         <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-        <PeopleSearch />
+        <CommandPalette />
       </SearchProvider>
       <Toaster theme={theme} position="bottom-right" richColors closeButton />
     </TooltipProvider>

@@ -94,6 +94,30 @@ export function isoWeekday(iso: string) {
   return ((new Date(Date.UTC(y, m - 1, d)).getUTCDay() + 6) % 7) + 1
 }
 
+/**
+ * Text as it is typed rather than as it is spelled.
+ *
+ * Nobody reaches for the acute to find André, and a search that insists on it is a
+ * search that fails on half this roster: Gonçalves, João, Sória. Decomposing and
+ * dropping the combining marks makes "goncalves" and "Gonçalves" the same string,
+ * which is the only sense in which they differ to somebody in a hurry.
+ */
+export const fold = (text: string) =>
+  text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+
+/**
+ * Whether every word typed appears somewhere in [fields], in any order.
+ *
+ * Word by word rather than as one string: "vieira joao" is the same person as "joao
+ * vieira", and a plain `includes` of the whole query says otherwise. It is not fuzzy
+ * matching — a typo still misses — but it covers the way people actually type a name
+ * they already know, which is surname first as often as not.
+ */
+export function matchesQuery(query: string, ...fields: (string | null | undefined)[]) {
+  const hay = fold(fields.filter(Boolean).join(' '))
+  return fold(query).split(/\s+/).filter(Boolean).every((word) => hay.includes(word))
+}
+
 export const todayIso = () => new Date().toISOString().slice(0, 10)
 
 /**

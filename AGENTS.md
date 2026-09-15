@@ -34,14 +34,17 @@ seen the real file, Active Directory authentication, the seeded development
 passwords, health checks beyond the database, and the menu and notifications having
 no way to carry a warning.
 
-**User editing is one field wide.** `psepre_app_user` is otherwise seed data: no
-create, no edit, no delete of a person, at any layer. The picture is the exception,
-because nothing fills it in on its own — Active Directory authenticates and carries no
-photographs, so somebody has to upload one. That gave `UserService` its first write
-and its first permission rule: **your own picture, or anybody's if you administer the
-application**, enforced in the service and mirrored by which buttons Equipa draws.
-Editing a name, an email or an admin flag still has no route and no screen; when it is
-wanted, the rule above is the one to follow.
+**A person can be edited but not created or deleted.** `psepre_app_user` is still
+seed data in that no route makes a row or removes one, at any layer. What a row holds
+is now editable, in two places and under two different rules. The picture is **your
+own, or anybody's if you administer the application**, because nothing fills it in on
+its own — Active Directory authenticates and carries no photographs. The name, the
+email and the admin flag are **administrators only**: they are how everybody else
+identifies a person in a plan, and the flag is the permission the rest is checked
+against. `UserService.update` also refuses an administrator taking their own flag off,
+because the screen that would put it back is the one it closes. The username and the
+password are in neither: they belong to whatever authenticates, which is a local hash
+today and Active Directory later.
 
 **A published plan that contradicts imported férias is reported, not pushed.** The
 commit that applies an import names the published days its rows put at odds (§6.3)
@@ -168,12 +171,14 @@ additionally checks `isAdmin`.
 | GET | `/users/{id}/avatar` | auth | **the one route that does not answer in the envelope**: it answers `image/*` bytes, because an `<img>` is on the other end. Failures are still ProblemDetails. Cached immutably — the address carries the version |
 | POST | `/users/{id}/avatar` | auth | multipart. Own picture, or anyone's when admin. Type sniffed from the bytes, 2 MB cap on the upload, then **re-encoded to a 128px PNG before storing** — the dashboard draws hundreds of marks at 13px and each was the whole file somebody uploaded |
 | DELETE | `/users/{id}/avatar` | auth | same rule |
+| PATCH | `/users/{id}` | admin | forename, surname, email, `is_admin`. Email is checked for a clash; an administrator cannot clear their own flag |
 | GET | `/teams` | auth | active teams |
 | GET | `/teams/{id}` | auth | |
 | GET | `/teams/{id}/members` | auth | includes leavers, which the generator needs |
 | GET | `/teams/{id}/candidates` | auth | active users not on the team |
 | POST | `/teams` | admin | |
-| POST | `/teams/{id}/members` | admin | |
+| POST | `/teams/{id}/members` | admin | also the way a member returns: one row per user per team, so it moves `joined_at` and clears `left_at` |
+| PATCH | `/teams/{id}/members/{userId}` | admin | moves `joined_at` and nothing else. A correction, not a return: somebody who left stays left |
 | DELETE | `/teams/{id}/members/{userId}` | admin | sets `left_at`, never deletes history |
 | PATCH | `/teams/{id}` | admin | name, weekday, required count, `fairness_since`. The name is optional and checked for a clash, the other three are not optional |
 | PATCH | `/teams/{id}/email` | admin | the subject and opening paragraph every message for the team starts from. Saved from the email page, which is where anybody has both the words and a reason to keep them |
@@ -483,7 +488,9 @@ messages**. They are not stylistic preferences; treat a violation as a defect.
   accent is white on the dark theme, so an orb inside a filled button wants the
   opposite of the page around it.
 - **Modals.** Every one comes from `components/ui/dialog.tsx`; there is no second
-  modal in the application. The primitive owns three things so that ten callers do not
+  modal in the application — the command palette is the same primitive with `bare`
+  set, which drops the header and the body's padding and leaves the title to a screen
+  reader, because its first row is its own search box and its list runs to the edges. The primitive owns three things so that ten callers do not
   each decide them: the entrance, the centring, and the resize. Its body carries a
   layout animation, so a modal whose contents change size — the bell as swaps are
   answered, a stepped form moving between questions — moves its own edge instead of
@@ -546,6 +553,23 @@ messages**. They are not stylistic preferences; treat a violation as a defect.
 - Loading is skeletons that hold the real row heights, so content never jumps. A
   blocking overlay is only for generating and publishing a plan.
 - Icons are `lucide-react`. No emoji, no icon fonts.
+- **⌘K reaches everything, and it is one list.** `components/layout/CommandPalette.tsx`
+  holds people, pages and actions together, moved through with the arrows and taken
+  with Enter. It was a people search that filtered the roster by a substring and put an
+  address on the clipboard: one kind of thing out of seven pages, no way to go to any
+  of them, and opened by a key it then needed the mouse for. The pages come from
+  `NAV` in `Shell.tsx` — exported for this, because a second list of the pages would be
+  a second place to forget one — and are filtered by the same admin flag the column
+  uses.
+- **Matching folds accents and takes words in any order** (`matchesQuery` in
+  `lib/utils.ts`). On this roster it is not a nicety: nobody reaches for the acute to
+  find André, "vieira joao" is the same person as "João Vieira", and the old substring
+  search only appeared to cope because the addresses have no accents in them to lose.
+- **A person opens into the box, not out of it.** Choosing somebody shows their next
+  days, their standing in the ledger and their férias in place, and keeps the search
+  box alive with their name as a chip in front of it — so the arrows still work and
+  Backspace on an empty box takes the chip off. The jumps to Plano, Balanço and Férias
+  are underneath, for the time the three lines are not the answer.
 - **A control has to hold the largest case, not the one in front of you.** The months
   on the email page were switches — a tree, then a connected run of segments, one per
   month — and both read well at four months and were a wall at sixteen: the AT plan

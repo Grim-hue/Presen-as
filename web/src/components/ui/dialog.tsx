@@ -20,6 +20,7 @@ export function Dialog({
   children,
   footer,
   width = 460,
+  bare = false,
   onSubmit
 }: {
   open: boolean
@@ -29,6 +30,15 @@ export function Dialog({
   children: ReactNode
   footer?: ReactNode
   width?: number
+  /**
+   * Drops the header and the body's padding, leaving the caller the whole surface.
+   *
+   * For the one modal that is not a few fields and a decision: the command palette,
+   * whose first row is its own search box and whose list runs to the edges. The title
+   * is still rendered, just only to a screen reader — Radix requires one, and a modal
+   * that announces nothing is a modal nobody blind can place.
+   */
+  bare?: boolean
   /**
    * The primary action, reached with mod+Enter.
    *
@@ -64,22 +74,29 @@ export function Dialog({
             'animate-rise-centred rounded-md border border-line bg-card shadow-2xl'
           )}
         >
-          <div className="flex items-start justify-between gap-4 px-5 pb-3 pt-5">
-            <div>
-              <Primitive.Title className="text-sm font-semibold text-fg-strong">{title}</Primitive.Title>
-              {description && (
-                <Primitive.Description className="mt-1 text-xs text-fg-muted">
-                  {description}
-                </Primitive.Description>
-              )}
+          {bare ? (
+            <>
+              <Primitive.Title className="sr-only">{title}</Primitive.Title>
+              {description && <Primitive.Description className="sr-only">{description}</Primitive.Description>}
+            </>
+          ) : (
+            <div className="flex items-start justify-between gap-4 px-5 pb-3 pt-5">
+              <div>
+                <Primitive.Title className="text-sm font-semibold text-fg-strong">{title}</Primitive.Title>
+                {description && (
+                  <Primitive.Description className="mt-1 text-xs text-fg-muted">
+                    {description}
+                  </Primitive.Description>
+                )}
+              </div>
+              <Primitive.Close
+                aria-label="Fechar"
+                className="rounded p-1 text-fg-soft hover:bg-[var(--hover2)] hover:text-fg-strong"
+              >
+                <X size={15} strokeWidth={1.8} />
+              </Primitive.Close>
             </div>
-            <Primitive.Close
-              aria-label="Fechar"
-              className="rounded p-1 text-fg-soft hover:bg-[var(--hover2)] hover:text-fg-strong"
-            >
-              <X size={15} strokeWidth={1.8} />
-            </Primitive.Close>
-          </div>
+          )}
 
           {/*
             * The body carries the resize, so a modal whose contents change size moves
@@ -97,7 +114,7 @@ export function Dialog({
           <motion.div
             layout={!reduced}
             transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className="px-5 pb-4"
+            className={bare ? '' : 'px-5 pb-4'}
           >
             {children}
           </motion.div>
