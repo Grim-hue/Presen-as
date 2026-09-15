@@ -1,0 +1,251 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+  <style>
+    *{box-sizing:border-box}
+    /* One OKLCH ladder at hue 270, chroma .005-.008: grey that stays grey. */
+    .sk{--bg:oklch(.16 .005 270);--side:oklch(.135 .005 270);--card:oklch(.195 .006 270);--elev:oklch(.225 .007 270);
+        --line:oklch(.27 .008 270);--line2:oklch(.235 .007 270);
+        --fg:oklch(.96 .003 270);--fg2:oklch(.84 .006 270);--fg3:oklch(.7 .008 270);--fg4:oklch(.55 .008 270);--fg5:oklch(.44 .008 270);
+        --acc:oklch(.96 .003 270);--acc2:oklch(.96 .003 270);--accbg:oklch(.26 .008 270);--accln:oklch(.96 .003 270/.2);--accwash:rgba(255,255,255,.055);
+        --monbg:rgba(255,255,255,.045);--monln:rgba(255,255,255,.2);--minibg:rgba(255,255,255,.1);
+        --okbg:#10281f;--okfg:#34d399;--okln:rgba(52,211,153,.3);
+        --wnbg:#2a2110;--wnfg:#fbbf24;--wnln:rgba(251,191,36,.3);
+        --dnbg:#2a1518;--dnfg:#f87171;--dnln:rgba(248,113,113,.3);
+        --inbg:#14202e;--infg:#60a5fa;--inln:rgba(96,165,250,.3);
+        --mtbg:oklch(.235 .007 270);--hover:rgba(255,255,255,.028);--hover2:rgba(255,255,255,.05);--row:rgba(255,255,255,.018);
+        --hatch:oklch(.21 .006 270);--field:oklch(.175 .005 270);--sqfg:#fff;--btnfg:oklch(.145 .005 270)}
+    .sk.light{--bg:#f7f7f8;--side:#fff;--card:#fff;--elev:#f2f2f4;--line:#e2e2e6;--line2:#ececef;
+        --fg:#16161a;--fg2:#3f3f47;--fg3:#6e6e78;--fg4:#8e8e99;--fg5:#a8a8b2;
+        --acc:#16161a;--acc2:#16161a;--accbg:#ececef;--accln:rgba(22,22,26,.16);--accwash:rgba(0,0,0,.045);
+        --monbg:rgba(0,0,0,.035);--monln:rgba(0,0,0,.16);--minibg:rgba(0,0,0,.08);
+        --okbg:#e8f7f0;--okfg:#0f7a52;--okln:rgba(15,122,82,.26);
+        --wnbg:#fdf4e3;--wnfg:#8a5a00;--wnln:rgba(138,90,0,.26);
+        --dnbg:#fdecec;--dnfg:#b3261e;--dnln:rgba(179,38,30,.26);
+        --inbg:#e9f1fd;--infg:#1c5fbe;--inln:rgba(28,95,190,.26);
+        --mtbg:#f0f0f3;--hover:rgba(0,0,0,.03);--hover2:rgba(0,0,0,.055);--row:rgba(0,0,0,.016);
+        --hatch:#e6e6ea;--field:#fafafb;--sqfg:#fff;--btnfg:#ffffff}
+    body{margin:0;font-family:'IBM Plex Sans','Segoe UI',sans-serif;-webkit-font-smoothing:antialiased}
+    a{color:var(--acc2);text-decoration:none}a:hover{color:var(--acc)}
+    .ic{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+    .mono{font-family:'JetBrains Mono',ui-monospace,monospace}
+    .app{display:flex;height:880px;background:var(--bg);color:var(--fg2)}
+    .side{width:214px;flex-shrink:0;background:var(--side);border-right:1px solid var(--line2);display:flex;flex-direction:column;padding:18px 0}
+    .brand{display:flex;align-items:center;gap:9px;padding:0 18px 22px;color:var(--fg)}
+    .sect{padding:18px 18px 7px;font-size:9.5px;letter-spacing:.14em;color:var(--fg5);font-family:'JetBrains Mono',monospace}
+    .nav{display:flex;flex-direction:column}
+    .nav a{display:flex;align-items:center;gap:10px;padding:8px 18px;color:var(--fg3);font-size:12.5px;font-family:'JetBrains Mono',monospace;border-left:2px solid transparent}
+    .nav a:hover{color:var(--fg);background:var(--hover)}
+    .nav a.on{color:var(--fg);border-left-color:var(--acc);background:var(--accwash)}
+    .nav a.on .ic{stroke:var(--acc2)}
+    .me{margin-top:auto;padding:14px 18px 0;border-top:1px solid var(--line2);display:flex;align-items:center;gap:9px}
+    .me i{width:24px;height:24px;border-radius:5px;background:#4f7fd8;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;color:#fff;font-style:normal;font-family:'JetBrains Mono',monospace}
+    .main{flex:1;display:flex;flex-direction:column;min-width:0}
+    .top{height:54px;flex-shrink:0;border-bottom:1px solid var(--line2);display:flex;align-items:center;justify-content:space-between;padding:0 24px;gap:16px}
+    .h1{font-size:14px;font-weight:600;color:var(--fg);letter-spacing:-.01em}
+    .body{flex:1;padding:20px 24px;overflow:hidden;display:flex;flex-direction:column;min-height:0}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:8px}
+    .btn{display:inline-flex;align-items:center;gap:7px;height:31px;padding:0 12px;border-radius:6px;border:1px solid var(--line);background:transparent;color:var(--fg2);font:500 12px 'JetBrains Mono',monospace;cursor:pointer}
+    .btn:hover{background:var(--hover2);color:var(--fg)}
+    .btn.pri{background:var(--acc);border-color:var(--acc);color:var(--btnfg)}
+    .btn.pri:hover{background:var(--acc2)}
+    .step{display:flex;align-items:center;border:1px solid var(--line);border-radius:6px;height:31px}
+    .step button{background:none;border:none;color:var(--fg3);cursor:pointer;padding:0 9px;display:flex;height:100%;align-items:center}
+    .step button:hover{color:var(--fg)}
+    .step span{padding:0 12px;font:600 12.5px 'JetBrains Mono',monospace;color:var(--fg);border-left:1px solid var(--line);border-right:1px solid var(--line);line-height:29px}
+    .tag{display:inline-flex;align-items:center;gap:5px;height:21px;padding:0 7px;border-radius:5px;font:500 10.5px 'JetBrains Mono',monospace;border:1px solid;letter-spacing:.02em}
+    .t-ok{background:var(--okbg);color:var(--okfg);border-color:var(--okln)}
+    .t-warn{background:var(--wnbg);color:var(--wnfg);border-color:var(--wnln)}
+    .t-dang{background:var(--dnbg);color:var(--dnfg);border-color:var(--dnln)}
+    .t-info{background:var(--inbg);color:var(--infg);border-color:var(--inln)}
+    .t-acc{background:var(--acc);color:var(--btnfg);border-color:var(--acc)}
+    .t-mut{background:var(--mtbg);color:var(--fg3);border-color:var(--line)}
+    table{width:100%;border-collapse:collapse}
+    th{text-align:left;font:600 9.5px 'JetBrains Mono',monospace;letter-spacing:.13em;color:var(--fg4);padding:0 14px 9px}
+    td{padding:10px 14px;border-top:1px solid var(--line2);font-size:12.5px;color:var(--fg2);vertical-align:middle}
+    tr:hover td{background:var(--row)}
+    .num{font-family:'JetBrains Mono',monospace}
+    .sq{width:18px;height:18px;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;font:600 8px 'JetBrains Mono',monospace;color:var(--sqfg)}
+    .who{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--fg2)}
+    .icb{background:none;border:none;color:var(--fg4);cursor:pointer;padding:4px;display:inline-flex;border-radius:4px}
+    .icb:hover{color:var(--fg);background:var(--hover2)}
+    .banner{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:7px;font-size:12.5px;background:var(--wnbg);border:1px solid var(--wnln);color:var(--wnfg);margin-bottom:16px}
+    .pse{height:15px;width:auto;opacity:.5;filter:brightness(0) invert(1)}
+    .sk.light .pse{filter:brightness(0);opacity:.4}
+    .foot{padding:13px 18px 0;margin-top:12px;border-top:1px solid var(--line2);display:flex;align-items:center;justify-content:space-between}
+    .ver{font:400 9.5px 'JetBrains Mono',monospace;color:var(--fg5);letter-spacing:.06em}
+    @keyframes dc-rise{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+    @keyframes dc-grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+    @keyframes dc-shim{100%{background-position:-200% 0}}
+    .rise{animation:dc-rise .5s cubic-bezier(.22,1,.36,1) both}
+    .grow{transform-origin:left;animation:dc-grow .85s cubic-bezier(.22,1,.36,1) both}
+    .skl{background:linear-gradient(90deg,var(--elev) 25%,var(--line) 37%,var(--elev) 63%);background-size:200% 100%;animation:dc-shim 1.5s linear infinite;border-radius:4px}
+    @media (prefers-reduced-motion:reduce){.rise,.grow,.skl{animation:none}.grow{transform:none}}
+  </style>
+</helmet>
+<div class="app sk {{theme}}">
+  <div class="side">
+    <div class="brand">
+      <svg class="ic" style="width:19px;height:19px;stroke:var(--acc)" viewBox="0 0 24 24"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/></svg>
+      <div>
+        <div class="mono" style="font-size:13.5px;font-weight:700;letter-spacing:-.01em">PPI</div>
+        <div class="mono" style="font-size:8.5px;letter-spacing:.06em;color:var(--fg5);margin-top:2px">Presenças nas Instalações</div>
+      </div>
+    </div>
+    <div class="sect">PLANEAMENTO</div>
+    <div class="nav">
+      <a href="#" class="on"><svg class="ic" viewBox="0 0 24 24"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>Dashboard</a>
+      <a href="#"><svg class="ic" viewBox="0 0 24 24"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/></svg>Plano</a>
+      <a href="#"><svg class="ic" viewBox="0 0 24 24"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>Balanco</a>
+    </div>
+    <div class="sect">DADOS</div>
+    <div class="nav">
+      <a href="#"><svg class="ic" viewBox="0 0 24 24"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>Ferias</a>
+      <a href="#"><svg class="ic" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Equipa</a>
+      <a href="#"><svg class="ic" viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>Feriados</a>
+    </div>
+    <div class="me">
+      <i>AF</i>
+      <div style="font-size:11px;color:var(--fg3)" class="mono">andre.freitas</div>
+      <button class="icb" style="margin-left:auto"><svg class="ic" style="width:15px;height:15px" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg></button>
+    </div>
+    <div class="foot">
+      <img class="pse" src="pse-logo.png" alt="PSE">
+      <span class="ver">v0.1.0</span>
+    </div>
+  </div>
+  <div class="main">
+    <div class="top">
+      <div class="h1">Dashboard</div>
+      <div class="step">
+        <button><svg class="ic" style="width:15px;height:15px" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button><span>2026</span><button><svg class="ic" style="width:15px;height:15px" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button>
+      </div>
+    </div>
+    <div class="body">
+      <style>
+        .stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:16px}
+        .st{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 15px;display:flex;align-items:center;justify-content:space-between}
+        .st .k{font:600 9.5px 'JetBrains Mono',monospace;letter-spacing:.13em;color:var(--fg4);margin-bottom:6px}
+        .st .v{font:500 21px 'JetBrains Mono',monospace;color:var(--fg);line-height:1}
+        .cols{flex:1;display:flex;gap:16px;min-height:0}
+        .bigc{flex:1;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:16px 18px 18px;display:flex;flex-direction:column;min-width:0}
+        .bh{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+        .dow{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;margin-bottom:5px}
+        .dow span{font:600 9.5px 'JetBrains Mono',monospace;letter-spacing:.1em;color:var(--fg5);padding-left:2px}
+        .bgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;flex:1}
+        .bc{border:1px solid var(--elev);border-radius:5px;padding:6px 7px;display:flex;flex-direction:column;gap:3px;min-height:0}
+        .bc.blank{border-color:transparent}
+        .bd{font:500 12px 'JetBrains Mono',monospace;color:var(--fg4)}
+        .bc.mon{border-color:var(--monln);background:var(--monbg)}
+        .bc.mon .bd{color:var(--fg);font-weight:600}
+        .bc.hol{background:repeating-linear-gradient(135deg,var(--hatch) 0 2px,transparent 2px 6px)}
+        .bc.hol .bd{color:var(--fg5);text-decoration:line-through}
+        .hn{font-size:8.5px;color:var(--fg4);line-height:1.25}
+        .bc:not(.hol) .hn{display:none}
+        .bw{display:flex;align-items:center;gap:4px;font-size:9.5px;color:var(--fg2)}
+        .bw i{width:13px;height:13px;border-radius:3px;font:600 6.5px 'JetBrains Mono',monospace;display:flex;align-items:center;justify-content:center;color:var(--sqfg);font-style:normal;flex-shrink:0}
+        .bc:not(.mon) .bw{display:none}
+        .rail{width:266px;flex-shrink:0;display:flex;flex-direction:column;gap:12px}
+        .mini{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 13px 14px;flex:1}
+        .mini h3{margin:0 0 9px;font:600 10px 'JetBrains Mono',monospace;letter-spacing:.13em;color:var(--acc2);text-transform:uppercase}
+        .mdow{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px;margin-bottom:4px}
+        .mdow span{text-align:center;font:400 8.5px 'JetBrains Mono',monospace;color:var(--fg5)}
+        .mg{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px}
+        .mc{height:24px;border-radius:3px;display:flex;flex-direction:column;align-items:center;justify-content:center;font:400 10px 'JetBrains Mono',monospace;color:var(--fg4)}
+        .mc.blank{visibility:hidden}
+        .mc.hol{color:var(--fg5);text-decoration:line-through}
+        .mc.mon{background:var(--minibg);color:var(--fg);font-weight:600}
+        .mw{display:flex;gap:2px}
+        .mw span{font:600 6.5px 'JetBrains Mono',monospace;color:var(--acc2)}
+        .mc:not(.mon) .mw{display:none}
+      </style>
+      <div class="stats">
+        <div class="st rise" style="animation-delay:0ms"><div><div class="k">PRÓXIMA SEGUNDA</div><div class="v" style="color:var(--acc2)">07 SET</div></div><div style="display:flex;flex-direction:column;gap:4px"><span class="who"><span class="sq" style="background:#4f7fd8">AF</span>André</span><span class="who"><span class="sq" style="background:#8b5cf6">TS</span>Tiago</span></div></div>
+        <div class="st rise" style="animation-delay:70ms"><div><div class="k">AS MINHAS SEGUNDAS</div><div class="v">{{n1}}</div></div><div style="font:400 11px 'JetBrains Mono',monospace;color:var(--fg4);text-align:right">de 40,7<br>esperadas</div></div>
+        <div class="st rise" style="animation-delay:140ms"><div><div class="k">POR RESOLVER</div><div class="v" style="color:var(--wnfg)">{{n2}}</div></div><div style="font:400 11px 'JetBrains Mono',monospace;color:var(--fg4);text-align:right">segundas sem<br>2 elementos</div></div>
+      </div>
+      <div class="cols">
+        <div class="bigc">
+          <div class="bh">
+            <div style="font-size:15px;font-weight:600;color:var(--fg)">{{big.name}} <span class="mono" style="color:var(--fg4);font-weight:400">2026</span></div>
+            <div class="step" style="height:27px"><button><svg class="ic" style="width:14px;height:14px" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button><span style="line-height:25px;font-size:11.5px">SET</span><button><svg class="ic" style="width:14px;height:14px" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button></div>
+          </div>
+          <div class="dow"><span>SEG</span><span>TER</span><span>QUA</span><span>QUI</span><span>SEX</span><span>SÁB</span><span>DOM</span></div>
+          <div class="bgrid">
+            <sc-for list="{{big.cells}}" as="c" hint-placeholder-count="35">
+              <div class="bc {{c.cls}}">
+                <span class="bd">{{c.d}}</span>
+                <span class="hn">{{c.hol}}</span>
+                <span class="bw"><i style="background:{{c.c1}}">{{c.i1}}</i>{{c.n1}}</span>
+                <span class="bw"><i style="background:{{c.c2}}">{{c.i2}}</i>{{c.n2}}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div class="rail">
+          <sc-for list="{{minis}}" as="mo" hint-placeholder-count="3">
+            <div class="mini">
+              <h3>{{mo.name}}</h3>
+              <div class="mdow"><span>S</span><span>T</span><span>Q</span><span>Q</span><span>S</span><span>S</span><span>D</span></div>
+              <div class="mg">
+                <sc-for list="{{mo.cells}}" as="c" hint-placeholder-count="31">
+                  <div class="mc {{c.cls}}"><span>{{c.d}}</span><span class="mw"><span>{{c.i1}}</span><span>{{c.i2}}</span></span></div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"theme":{"editor":"enum","options":["escuro","claro"],"default":"escuro"}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { p: 0 }; }
+  componentDidMount() {
+    const self = this, t0 = Date.now(), dur = 900;
+    this.iv = setInterval(function () {
+      const r = Math.min(1, (Date.now() - t0) / dur);
+      self.setState({ p: 1 - Math.pow(1 - r, 3) });
+      if (r >= 1) clearInterval(self.iv);
+    }, 32);
+  }
+  componentWillUnmount() { clearInterval(this.iv); }
+  renderVals() {
+    const HOL = {'2026-1-1':'Ano Novo','2026-4-3':'Sexta-feira Santa','2026-4-5':'Páscoa','2026-4-25':'25 de Abril','2026-5-1':'Dia do Trabalhador','2026-6-4':'Corpo de Deus','2026-6-10':'Dia de Portugal','2026-6-13':'Santo António','2026-8-15':'Assunção','2026-10-5':'Implantação da República','2026-11-1':'Todos os Santos','2026-12-1':'Restauração','2026-12-8':'Imaculada','2026-12-25':'Natal'};
+    const NAMES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+    const T = [['AF','André','#4f7fd8'],['TS','Tiago','#8b5cf6'],['JV','João','#14b8a6']];
+    let k = 0; const all = [];
+    for (let m = 0; m < 12; m++) {
+      const lead = (new Date(2026, m, 1).getDay() + 6) % 7;
+      const dim = new Date(2026, m + 1, 0).getDate();
+      const cells = [];
+      for (let i = 0; i < lead; i++) cells.push({ key: 'b' + m + '-' + i, cls: 'blank', d: '', hol: '', i1: '', i2: '', n1: '', n2: '', c1: '', c2: '' });
+      for (let d = 1; d <= dim; d++) {
+        const hn = HOL['2026-' + (m + 1) + '-' + d] || '';
+        const mon = new Date(2026, m, d).getDay() === 1;
+        const c = { key: m + '-' + d, cls: hn ? 'hol' : '', d: d, hol: hn, i1: '', i2: '', n1: '', n2: '', c1: '', c2: '' };
+        if (mon && !hn) {
+          const on = T.filter(function (_, i) { return i !== k % 3; }); k++;
+          c.cls = 'mon'; c.i1 = on[0][0]; c.n1 = on[0][1]; c.c1 = on[0][2];
+          c.i2 = on[1][0]; c.n2 = on[1][1]; c.c2 = on[1][2];
+        }
+        cells.push(c);
+      }
+      all.push({ key: 'm' + m, name: NAMES[m], cells: cells });
+    }
+    const p = this.state.p;
+    return { big: all[8], minis: all.slice(9, 12), n1: Math.round(41 * p), n2: Math.round(4 * p), theme: (this.props.theme === 'claro' ? 'light' : 'dark') };
+  }
+}
+</script>
+</body>
+</html>

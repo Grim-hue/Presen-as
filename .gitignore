@@ -1,0 +1,32 @@
+# macOS
+.DS_Store
+
+# Gradle / JVM
+jvm/**/build/
+jvm/**/.gradle/
+jvm/**/.kotlin/
+*.class
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
+
+# Node / Vite
+node_modules/
+web/dist/
+*.local
+/tmp/
+
+# Editors
+.idea/
+.vscode/
+*.iml
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Design canvas build output (regenerate with: node design/build.mjs)
+design/presencas-direcoes.html
+
+# Logs
+*.log

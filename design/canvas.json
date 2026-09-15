@@ -1,0 +1,108 @@
+{
+  "artboards": [
+    {
+      "file": "Main.dc.html",
+      "title": "Dashboard",
+      "x": 0,
+      "y": 0,
+      "w": 1280,
+      "h": 880
+    },
+    {
+      "file": "Plano.dc.html",
+      "title": "Plano",
+      "x": 1400,
+      "y": 0,
+      "w": 1280,
+      "h": 880
+    },
+    {
+      "file": "Balanco.dc.html",
+      "title": "Balanço",
+      "x": 2800,
+      "y": 0,
+      "w": 1280,
+      "h": 880
+    },
+    {
+      "file": "Ferias.dc.html",
+      "title": "Férias",
+      "x": 0,
+      "y": 1060,
+      "w": 1280,
+      "h": 880
+    },
+    {
+      "file": "Equipa.dc.html",
+      "title": "Equipa",
+      "x": 1400,
+      "y": 1060,
+      "w": 1280,
+      "h": 880
+    },
+    {
+      "file": "Feriados.dc.html",
+      "title": "Feriados",
+      "x": 2800,
+      "y": 1060,
+      "w": 1280,
+      "h": 880
+    },
+    {
+      "file": "Login.dc.html",
+      "title": "Login",
+      "x": 0,
+      "y": 2120,
+      "w": 1280,
+      "h": 880
+    },
+    {
+      "file": "Skeleton.dc.html",
+      "title": "Plano · a carregar",
+      "x": 1400,
+      "y": 2120,
+      "w": 1280,
+      "h": 880
+    }
+  ],
+  "annotations": [
+    {
+      "id": "intro",
+      "x": -500,
+      "y": 0,
+      "w": 430,
+      "text": "PPI — oito artboards.\n\nCada um tem um seletor Tema por cima: escuro ou claro. Não é uma segunda versão pintada à mão, são os mesmos tokens de cor a trocar de valor, por isso é assim que fica no CSS.\n\nA cor só aparece onde significa alguma coisa: o quadrado de cada elemento e as pills de estado. Todo o resto é branco, preto e cinzento.\n\nOs dados são reais. As segundas saem das datas de 2026 e o 5 de outubro aparece vazio porque é o único feriado do ano que cai a uma segunda."
+    },
+    {
+      "id": "motion",
+      "x": 4180,
+      "y": 0,
+      "w": 400,
+      "text": "Movimento — recarrega o artboard para ver.\n\nOs números das estatísticas contam a subir, as barras do Balanço crescem da esquerda para a direita, e os cartões entram escalonados de 70 em 70 ms.\n\nTudo com uma só curva, cubic-bezier(.22,1,.36,1), e tudo desligado sob prefers-reduced-motion. É animação de entrada, não decoração em loop."
+    },
+    {
+      "id": "ferias-note",
+      "x": -500,
+      "y": 1060,
+      "w": 430,
+      "text": "Férias abre no Calendário. Os separadores funcionam a sério, clica para ver a Lista e as Importações.\n\nAgosto é o mês que expõe o problema: as três ausências sobrepõem-se e há segundas com 1 e com 0 elementos livres, marcadas a amarelo na própria célula.\n\nNa Lista, o badge EXCEL · EDITADO é a linha que uma reimportação vai marcar como conflito em vez de escrever por cima."
+    },
+    {
+      "id": "skel-note",
+      "x": 2800,
+      "y": 2120,
+      "w": 420,
+      "text": "Estado de carregamento, sem overlay.\n\nA navegação, os cabeçalhos das colunas e os botões ficam onde estão, e só o conteúdo desconhecido é que brilha. Nada tapa o ecrã e nada salta de sítio quando os dados chegam, porque os blocos já têm a altura das linhas reais.\n\nSpinner a tapar tudo fica reservado para ações destrutivas ou para o próprio Gerar, onde de facto não podes mexer em mais nada."
+    },
+    {
+      "id": "logo-note",
+      "x": -500,
+      "y": 2120,
+      "w": 430,
+      "text": "O logo é o pse-logo.png do pse-site, sem ficheiro novo: brightness(0) invert(1) para o tema escuro e brightness(0) para o claro, a mesma técnica que o AdminSidebar.vue já usa.\n\nVive no fundo da barra lateral com a versão ao lado, e no login por baixo do cartão."
+    }
+  ],
+  "launch": {
+    "view": "canvas"
+  }
+}

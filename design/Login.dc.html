@@ -1,0 +1,130 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+  <style>
+    *{box-sizing:border-box}
+    /* One OKLCH ladder at hue 270, chroma .005-.008: grey that stays grey. */
+    .sk{--bg:oklch(.16 .005 270);--side:oklch(.135 .005 270);--card:oklch(.195 .006 270);--elev:oklch(.225 .007 270);
+        --line:oklch(.27 .008 270);--line2:oklch(.235 .007 270);
+        --fg:oklch(.96 .003 270);--fg2:oklch(.84 .006 270);--fg3:oklch(.7 .008 270);--fg4:oklch(.55 .008 270);--fg5:oklch(.44 .008 270);
+        --acc:oklch(.96 .003 270);--acc2:oklch(.96 .003 270);--accbg:oklch(.26 .008 270);--accln:oklch(.96 .003 270/.2);--accwash:rgba(255,255,255,.055);
+        --monbg:rgba(255,255,255,.045);--monln:rgba(255,255,255,.2);--minibg:rgba(255,255,255,.1);
+        --okbg:#10281f;--okfg:#34d399;--okln:rgba(52,211,153,.3);
+        --wnbg:#2a2110;--wnfg:#fbbf24;--wnln:rgba(251,191,36,.3);
+        --dnbg:#2a1518;--dnfg:#f87171;--dnln:rgba(248,113,113,.3);
+        --inbg:#14202e;--infg:#60a5fa;--inln:rgba(96,165,250,.3);
+        --mtbg:oklch(.235 .007 270);--hover:rgba(255,255,255,.028);--hover2:rgba(255,255,255,.05);--row:rgba(255,255,255,.018);
+        --hatch:oklch(.21 .006 270);--field:oklch(.175 .005 270);--sqfg:#fff;--btnfg:oklch(.145 .005 270)}
+    .sk.light{--bg:#f7f7f8;--side:#fff;--card:#fff;--elev:#f2f2f4;--line:#e2e2e6;--line2:#ececef;
+        --fg:#16161a;--fg2:#3f3f47;--fg3:#6e6e78;--fg4:#8e8e99;--fg5:#a8a8b2;
+        --acc:#16161a;--acc2:#16161a;--accbg:#ececef;--accln:rgba(22,22,26,.16);--accwash:rgba(0,0,0,.045);
+        --monbg:rgba(0,0,0,.035);--monln:rgba(0,0,0,.16);--minibg:rgba(0,0,0,.08);
+        --okbg:#e8f7f0;--okfg:#0f7a52;--okln:rgba(15,122,82,.26);
+        --wnbg:#fdf4e3;--wnfg:#8a5a00;--wnln:rgba(138,90,0,.26);
+        --dnbg:#fdecec;--dnfg:#b3261e;--dnln:rgba(179,38,30,.26);
+        --inbg:#e9f1fd;--infg:#1c5fbe;--inln:rgba(28,95,190,.26);
+        --mtbg:#f0f0f3;--hover:rgba(0,0,0,.03);--hover2:rgba(0,0,0,.055);--row:rgba(0,0,0,.016);
+        --hatch:#e6e6ea;--field:#fafafb;--sqfg:#fff;--btnfg:#ffffff}
+    body{margin:0;font-family:'IBM Plex Sans','Segoe UI',sans-serif;-webkit-font-smoothing:antialiased}
+    a{color:var(--acc2);text-decoration:none}a:hover{color:var(--acc)}
+    .ic{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+    .mono{font-family:'JetBrains Mono',ui-monospace,monospace}
+    .app{display:flex;height:880px;background:var(--bg);color:var(--fg2)}
+    .side{width:214px;flex-shrink:0;background:var(--side);border-right:1px solid var(--line2);display:flex;flex-direction:column;padding:18px 0}
+    .brand{display:flex;align-items:center;gap:9px;padding:0 18px 22px;color:var(--fg)}
+    .sect{padding:18px 18px 7px;font-size:9.5px;letter-spacing:.14em;color:var(--fg5);font-family:'JetBrains Mono',monospace}
+    .nav{display:flex;flex-direction:column}
+    .nav a{display:flex;align-items:center;gap:10px;padding:8px 18px;color:var(--fg3);font-size:12.5px;font-family:'JetBrains Mono',monospace;border-left:2px solid transparent}
+    .nav a:hover{color:var(--fg);background:var(--hover)}
+    .nav a.on{color:var(--fg);border-left-color:var(--acc);background:var(--accwash)}
+    .nav a.on .ic{stroke:var(--acc2)}
+    .me{margin-top:auto;padding:14px 18px 0;border-top:1px solid var(--line2);display:flex;align-items:center;gap:9px}
+    .me i{width:24px;height:24px;border-radius:5px;background:#4f7fd8;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;color:#fff;font-style:normal;font-family:'JetBrains Mono',monospace}
+    .main{flex:1;display:flex;flex-direction:column;min-width:0}
+    .top{height:54px;flex-shrink:0;border-bottom:1px solid var(--line2);display:flex;align-items:center;justify-content:space-between;padding:0 24px;gap:16px}
+    .h1{font-size:14px;font-weight:600;color:var(--fg);letter-spacing:-.01em}
+    .body{flex:1;padding:20px 24px;overflow:hidden;display:flex;flex-direction:column;min-height:0}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:8px}
+    .btn{display:inline-flex;align-items:center;gap:7px;height:31px;padding:0 12px;border-radius:6px;border:1px solid var(--line);background:transparent;color:var(--fg2);font:500 12px 'JetBrains Mono',monospace;cursor:pointer}
+    .btn:hover{background:var(--hover2);color:var(--fg)}
+    .btn.pri{background:var(--acc);border-color:var(--acc);color:var(--btnfg)}
+    .btn.pri:hover{background:var(--acc2)}
+    .step{display:flex;align-items:center;border:1px solid var(--line);border-radius:6px;height:31px}
+    .step button{background:none;border:none;color:var(--fg3);cursor:pointer;padding:0 9px;display:flex;height:100%;align-items:center}
+    .step button:hover{color:var(--fg)}
+    .step span{padding:0 12px;font:600 12.5px 'JetBrains Mono',monospace;color:var(--fg);border-left:1px solid var(--line);border-right:1px solid var(--line);line-height:29px}
+    .tag{display:inline-flex;align-items:center;gap:5px;height:21px;padding:0 7px;border-radius:5px;font:500 10.5px 'JetBrains Mono',monospace;border:1px solid;letter-spacing:.02em}
+    .t-ok{background:var(--okbg);color:var(--okfg);border-color:var(--okln)}
+    .t-warn{background:var(--wnbg);color:var(--wnfg);border-color:var(--wnln)}
+    .t-dang{background:var(--dnbg);color:var(--dnfg);border-color:var(--dnln)}
+    .t-info{background:var(--inbg);color:var(--infg);border-color:var(--inln)}
+    .t-acc{background:var(--acc);color:var(--btnfg);border-color:var(--acc)}
+    .t-mut{background:var(--mtbg);color:var(--fg3);border-color:var(--line)}
+    table{width:100%;border-collapse:collapse}
+    th{text-align:left;font:600 9.5px 'JetBrains Mono',monospace;letter-spacing:.13em;color:var(--fg4);padding:0 14px 9px}
+    td{padding:10px 14px;border-top:1px solid var(--line2);font-size:12.5px;color:var(--fg2);vertical-align:middle}
+    tr:hover td{background:var(--row)}
+    .num{font-family:'JetBrains Mono',monospace}
+    .sq{width:18px;height:18px;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;font:600 8px 'JetBrains Mono',monospace;color:var(--sqfg)}
+    .who{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--fg2)}
+    .icb{background:none;border:none;color:var(--fg4);cursor:pointer;padding:4px;display:inline-flex;border-radius:4px}
+    .icb:hover{color:var(--fg);background:var(--hover2)}
+    .banner{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:7px;font-size:12.5px;background:var(--wnbg);border:1px solid var(--wnln);color:var(--wnfg);margin-bottom:16px}
+    .pse{height:15px;width:auto;opacity:.5;filter:brightness(0) invert(1)}
+    .sk.light .pse{filter:brightness(0);opacity:.4}
+    .foot{padding:13px 18px 0;margin-top:12px;border-top:1px solid var(--line2);display:flex;align-items:center;justify-content:space-between}
+    .ver{font:400 9.5px 'JetBrains Mono',monospace;color:var(--fg5);letter-spacing:.06em}
+    @keyframes dc-rise{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+    @keyframes dc-grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+    @keyframes dc-shim{100%{background-position:-200% 0}}
+    .rise{animation:dc-rise .5s cubic-bezier(.22,1,.36,1) both}
+    .grow{transform-origin:left;animation:dc-grow .85s cubic-bezier(.22,1,.36,1) both}
+    .skl{background:linear-gradient(90deg,var(--elev) 25%,var(--line) 37%,var(--elev) 63%);background-size:200% 100%;animation:dc-shim 1.5s linear infinite;border-radius:4px}
+    @media (prefers-reduced-motion:reduce){.rise,.grow,.skl{animation:none}.grow{transform:none}}
+  </style>
+  <style>
+    .wrap{height:880px;display:flex;align-items:center;justify-content:center;background:var(--bg);
+      background-image:linear-gradient(var(--line2) 1px,transparent 1px),linear-gradient(90deg,var(--line2) 1px,transparent 1px);background-size:56px 56px}
+    .lab{display:block;font:600 9.5px 'JetBrains Mono',monospace;letter-spacing:.13em;color:var(--fg4);margin:0 0 7px}
+    .fld{display:flex;align-items:center;gap:9px;height:38px;padding:0 11px;border:1px solid var(--line);border-radius:6px;background:var(--field);color:var(--fg3);font-size:13px;margin-bottom:17px}
+    .fld svg{stroke:var(--fg4)}
+    .go{width:100%;height:38px;border:none;border-radius:6px;background:var(--acc);color:var(--btnfg);font:600 12.5px 'JetBrains Mono',monospace;cursor:pointer;letter-spacing:.03em}
+    .go:hover{background:var(--acc2)}
+  </style>
+</helmet>
+<div class="wrap sk {{theme}}">
+  <div style="width:376px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:22px;padding-left:2px">
+      <svg class="ic" style="width:21px;height:21px;stroke:var(--acc)" viewBox="0 0 24 24"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/></svg>
+      <span style="font:700 17px 'JetBrains Mono',monospace;color:var(--fg);letter-spacing:-.02em">PPI</span>
+    </div>
+    <div class="card" style="padding:30px 30px 26px">
+      <div style="font-size:15px;font-weight:600;color:var(--fg);margin-bottom:4px">Iniciar sessão</div>
+      <div style="font-size:12.5px;color:var(--fg3);margin-bottom:24px">Planeamento presencial da development team</div>
+      <label class="lab">UTILIZADOR</label>
+      <div class="fld"><svg class="ic" style="width:15px;height:15px" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>andre.freitas</div>
+      <label class="lab">PALAVRA-PASSE</label>
+      <div class="fld"><svg class="ic" style="width:15px;height:15px" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span style="letter-spacing:.22em">••••••••••</span></div>
+      <button class="go">ENTRAR</button>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:center;gap:13px;margin-top:22px">
+      <img class="pse" style="height:17px" src="pse-logo.png" alt="PSE">
+      <span class="ver">v0.1.0</span>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"theme":{"editor":"enum","options":["escuro","claro"],"default":"escuro"}}'>
+class Component extends DCLogic {
+  renderVals() { return { theme: (this.props.theme === 'claro' ? 'light' : 'dark') }; }
+}
+</script>
+</body>
+</html>

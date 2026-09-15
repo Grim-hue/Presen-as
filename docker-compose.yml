@@ -1,0 +1,24 @@
+services:
+  db:
+    build:
+      context: .
+      dockerfile: docker/dockerfile-db
+    environment:
+      POSTGRES_USER: dbuser
+      POSTGRES_PASSWORD: potatoes
+      POSTGRES_DB: presenceDB
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      # 5632 on the host so this can run alongside survey-suite, which takes 5532.
+      - "5632:5432"
+    volumes:
+      - presence_db_data:/var/lib/postgresql
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dbuser -d presenceDB"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+volumes:
+  presence_db_data:

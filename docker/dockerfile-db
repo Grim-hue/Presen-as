@@ -1,0 +1,16 @@
+FROM postgres:16
+
+USER postgres
+WORKDIR /app
+
+# Run once, in order, when the container initialises an empty data volume.
+# 001_drop is deliberately not copied: it is the manual reset, not part of setup.
+COPY sql/002_create_tables_pg.sql /docker-entrypoint-initdb.d/2_create.sql
+COPY sql/003_insert_into_tables_pg.sql /docker-entrypoint-initdb.d/3_insert.sql
+
+COPY --chown=postgres:postgres ./docker/scripts/wait-for-postgres.sh ./bin/wait-for-postgres.sh
+USER root
+RUN chmod +x ./bin/wait-for-postgres.sh
+USER postgres
+
+EXPOSE 5432
