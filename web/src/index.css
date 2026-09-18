@@ -75,32 +75,11 @@
   --mac-min: #febc2e;
   --mac-zoom: #28c840;
   /*
-   * The sign in ground plane. A day someone is in the office stands out of the empty
-   * ground as a block, so the top, its outline and the two faces that point at the
-   * viewer each need a value per theme: on the light ground the block is the white of
-   * a card with grey sides, on the dark one it is a step above the page with sides
-   * that fall away into it. An alpha over both would go the wrong way in one of them.
-   *
-   * --iso-line is the block's own outline and nothing else. It used to draw the empty
-   * tiles as well, which is where the name comes from.
+   * The light behind the sign in form. A step brighter than the page in each theme
+   * rather than white over both: on the light page white is the only step up there is,
+   * and on the dark one white at any alpha reads as fog rather than as light.
    */
-  --iso-line: #e8e8ec;
-  --iso-face: #ffffff;
-  --iso-side: #e4e4ea;
-  --iso-side2: #d2d2da;
-  /*
-   * The light that travels the border of the sign in window.
-   *
-   * Two stops, and neither of them can be a token borrowed from elsewhere. The head
-   * has to beat the border it runs along, and the border is --line in both themes:
-   * near white on the light ground and near black on the dark one, so a single value
-   * would be invisible in one of them. The trail then has to fade towards the card,
-   * which is white here and a dark grey there, so it moves the opposite way from the
-   * head: down into the ink on the light theme, up into the light on the dark one.
-   *
-   * The head is --brand, not a copy of it, so the dark theme's blue comes with the
-   * theme and only the trail needs a second value below.
-   */
+  --login-glow: #ffffff;
 }
 
 /*
@@ -143,10 +122,7 @@ html[data-theme='dark'] {
   --mark-at: oklch(0.72 0.138 264);
   --mark-dev-from: #fc6d26;
   --mark-dev-to: #e24329;
-  --iso-line: oklch(0.235 0.007 270);
-  --iso-face: oklch(0.33 0.008 270);
-  --iso-side: oklch(0.235 0.007 270);
-  --iso-side2: oklch(0.175 0.005 270);
+  --login-glow: oklch(0.235 0.008 270);
 }
 
 @layer base {
@@ -183,128 +159,16 @@ html[data-theme='dark'] {
   }
 
   /*
-   * The isometric plane behind the sign in form.
+   * A soft light behind the sign in form, from the centre to nothing well before the
+   * edges.
    *
-   * One axonometric rotation on the grid and no perspective, so a block is the same
-   * size wherever it sits on screen and the plane reads as a drawing rather than as a
-   * photograph. The tiles are small and close on purpose: at any larger size the
-   * plane stops being a ground and starts competing with the form in front of it.
+   * An ellipse wider than it is tall, because the screen is, and a plain CSS layer
+   * rather than something drawn on the canvas: it never moves, so the browser can paint
+   * it once and leave it. The dust over it is what makes it read as light: the canvas
+   * draws the points brighter the nearer they are to the centre.
    */
-  .iso {
-    /* Read by both halves of a shifting block, which have to agree on it. Matches
-       SHIFT_CYCLE in the view, which sets where in the cycle each block starts. */
-    --shift-cycle: 26s;
-    display: grid;
-    /* The count comes from the view, which is the only place that knows how many
-       tiles it dealt. A literal here would be a second copy of COLS, free to drift. */
-    grid-template-columns: repeat(var(--cols), 48px);
-    grid-auto-rows: 48px;
-    gap: 14px;
-    transform-style: preserve-3d;
-    transform: translate(-50%, -50%) rotateX(56deg) rotateZ(45deg) scale(1.3);
-  }
-  /*
-   * The two openings the plane shows through, painted over the field in the page
-   * colour rather than masked out of it.
-   *
-   * This used to be a mask on the wrapper, with an opacity fade on the same element.
-   * Each of those forces the plane into a grouped layer, and a group has to be
-   * re-rendered whole on every frame that anything inside it animates: all twelve
-   * hundred tiles, depth sorted, then masked, sixty times a second. Cutting the
-   * number of animated blocks by four fifths barely moved it, because the cost was
-   * never the animations. Painting the fade on top instead leaves the plane
-   * ungrouped, so the blocks composite on their own.
-   *
-   * Two layers, and the way they combine is the reason there are only two. Paint
-   * stacks, so a point on the screen is clear only where every layer is transparent:
-   * the layers intersect, they do not add. The horizontal one therefore has to hold
-   * both openings by itself, which a single gradient does by being transparent at each
-   * end and opaque in the middle, and the vertical one then trims the top and the
-   * bottom off both at once. Two radial gradients centred on the two openings would
-   * read as the obvious way to do this and would clear nothing at all.
-   *
-   * The middle stays opaque from 40% to 60%, which is wider than the 376px card on
-   * any screen this is used on, so nothing ever stands behind the form.
-   *
-   * The ground behind is a flat colour, so covering and cutting out look the same.
-   */
-  .iso-scrim {
-    background:
-      linear-gradient(90deg, transparent 0 8%, var(--bg) 40% 60%, transparent 92% 100%),
-      linear-gradient(180deg, var(--bg) 0%, transparent 20%, transparent 80%, var(--bg) 100%);
-  }
-  /*
-   * The plane is never quite still: the whole field drifts a little under half a
-   * minute one way and the same back, for ever.
-   *
-   * It rides on the wrapper rather than on .iso, and that is deliberate. .iso carries
-   * the axonometric rotation, and an animation on the same element would have to
-   * restate that whole chain inside the keyframes, where it would sit out of reach of
-   * the rule that owns it and drift out of step the first time either is touched.
-   * The wrapper is a plain 2D box outside the 3D context, so it can be moved without
-   * knowing anything about the projection.
-   *
-   * will-change because the animation never ends and the wrapper is inset-0 under an
-   * overflow-hidden parent: the layer it promotes is the size of the viewport, not
-   * the size of the plane hanging out of it.
-   */
-  .iso-sway {
-    will-change: transform;
-    animation: isoSway 28s ease-in-out infinite alternate;
-  }
-  /*
-   * The arrival: every block grows out of the ground once, from under the card
-   * outwards.
-   *
-   * The scale is on this wrapper and not on the block, and that is the whole trick.
-   * scaleZ here squashes the lifted top face and both of its sides along the same
-   * axis, so one transform animates the entire column and stays geometrically honest
-   * at every frame. On the block itself it would scale the sides while leaving the
-   * top floating at its full height.
-   */
-  .iso-cell {
-    transform-style: preserve-3d;
-    animation: isoGrow 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
-  }
-  /*
-   * A tenth of the blocks go on rising and falling after the arrival has finished.
-   *
-   * Both animations drive the same property, so they are sequenced by delay rather
-   * than composed: the breath is the later of the two and wins once it starts, and it
-   * is left at the default fill so it contributes nothing while it waits and the
-   * arrival is free to hold the block flat. The second delay is set per block from
-   * the view, which is why the order of this list is not arbitrary.
-   *
-   * The scale is proportional, so a tall block breathes further than a short one.
-   * That is the right way round: it is the same 16% of a column either way, and a
-   * field where every block moved the same absolute distance would read as a sheet
-   * rather than as a plane of separate things.
-   */
-  /*
-   * A block on its way up or down, rather than one that arrived and stayed.
-   *
-   * It takes no part in the arrival at all: the cycle opens flat and unfilled, which
-   * is where the entrance would have left it anyway, so the two never share a
-   * property and no delay has to be sequenced against the other. The fill leads the
-   * rise by a couple of points here for the same reason it does on arrival, so a
-   * block takes its colour a moment before it starts to climb.
-   *
-   * The pair have to be declared on the two elements separately because they drive
-   * different properties on different boxes, and they are held together only by
-   * reading the same delay off the cell.
-   */
-  .iso-cell[data-shift] {
-    animation: isoShift var(--shift-cycle) ease-in-out infinite;
-    animation-delay: var(--d);
-  }
-  .iso-cell[data-shift] .iso-block {
-    animation: isoShiftFill var(--shift-cycle) ease-in-out infinite;
-    animation-delay: var(--d);
-  }
-  .iso-cell[data-breathe] {
-    animation:
-      isoGrow 0.85s cubic-bezier(0.22, 1, 0.36, 1) both,
-      isoBreathe 9s ease-in-out infinite alternate;
+  .login-glow {
+    background: radial-gradient(ellipse 58% 62% at 50% 50%, var(--login-glow) 0%, transparent 72%);
   }
   /*
    * The slash on the password eye, drawn rather than swapped in.
@@ -330,116 +194,6 @@ html[data-theme='dark'] {
   [data-eye-shown] .eye-slash {
     stroke-dashoffset: 0;
   }
-  /*
-   * An empty tile paints nothing at all, and still has to be here.
-   *
-   * The grid places tiles in source order, so dropping the element would slide every
-   * block after it one cell along and the field the view dealt would not be the field
-   * on the screen. It is a placeholder, not a leftover.
-   *
-   * It used to draw its own outline, and the outlines together were the grid the
-   * blocks stood on. Off, the ground is the page and the blocks are the only thing on
-   * it, which is the difference between a plane of objects and a sheet of graph paper
-   * with things sitting on it.
-   */
-  .iso-flat {
-  }
-  /*
-   * A block is one top face plus the two sides that hang off its near edges: a pair
-   * of real quads rather than a stack of box shadows, so a column costs two
-   * rectangles and no repaint once it is drawn.
-   */
-  .iso-block {
-    position: relative;
-    height: 100%;
-    background: var(--iso-face);
-    border: 1px solid var(--iso-line);
-    transform-style: preserve-3d;
-    transform: translateZ(var(--h));
-    @apply rounded-sm;
-  }
-  .iso-block::before,
-  .iso-block::after {
-    content: '';
-    position: absolute;
-    background: var(--iso-side);
-  }
-  /*
-   * The colour arrives before the height does. A block starts as its outline on empty
-   * ground and takes its fill a moment later, so it draws itself before it stands up
-   * rather than being solid from the first frame.
-   *
-   * Colour rather than opacity, and that is not a preference: opacity is a grouping
-   * property and would flatten the two side faces into the top for the length of the
-   * fade. background-color is not, so the block stays solid while it fills.
-   *
-   * Only the top face. The block starts flat on the ground, where its sides have no
-   * height to show, so fading them cost three paint animations a block and bought
-   * nothing visible.
-   */
-  .iso-block {
-    animation: isoFill 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
-    animation-delay: var(--d);
-  }
-  .iso-block::before {
-    left: -1px;
-    right: -1px;
-    top: 100%;
-    height: var(--h);
-    transform-origin: top;
-    transform: rotateX(-90deg);
-  }
-  .iso-block::after {
-    top: -1px;
-    bottom: -1px;
-    left: 100%;
-    width: var(--h);
-    background: var(--iso-side2);
-    transform-origin: left;
-    transform: rotateY(90deg);
-  }
-}
-
-/*
- * The finish is the block's own height, so one keyframe serves every column.
- *
- * It starts flat on the ground. Crossing from an exact zero used to read as a snap,
- * but that was when the block was already grey on the first frame: now it arrives
- * with its colour, and the two together read as settling rather than as a jump.
- */
-@keyframes isoGrow {
-  from { transform: scaleZ(0); }
-}
-
-/* The drift, and the breath. Both start from the element's own resting transform, so
-   neither needs to know what the other one did. */
-@keyframes isoSway {
-  from { transform: translate3d(-18px, -9px, 0); }
-  to { transform: translate3d(18px, 9px, 0); }
-}
-
-@keyframes isoBreathe {
-  to { transform: scaleZ(1.16); }
-}
-
-/* Up for about a third of the cycle, down for the rest, and easing through both ends
-   so a block never snaps flat. */
-@keyframes isoShift {
-  0%, 10% { transform: scaleZ(0); }
-  22%, 48% { transform: scaleZ(1); }
-  60%, 100% { transform: scaleZ(0); }
-}
-
-@keyframes isoShiftFill {
-  0%, 8% { background-color: transparent; }
-  20%, 50% { background-color: var(--iso-face); }
-  62%, 100% { background-color: transparent; }
-}
-
-/* The finish is each face's own colour, so one keyframe serves the top and both
-   sides. */
-@keyframes isoFill {
-  from { background-color: transparent; }
 }
 
 html[data-theme='light'] .pse-mark { filter: brightness(0); opacity: 0.4; }

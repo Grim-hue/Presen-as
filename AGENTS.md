@@ -545,11 +545,24 @@ messages**. They are not stylistic preferences; treat a violation as a defect.
   The durations follow theirs, 250–400ms; the curve is this project's own, because
   there is still only one. `motion/react` drives it, so, like `BorderBeam`, it opts
   out of reduced motion itself rather than relying on the CSS rule.
-- The sign in screen is the one exception, and it stops at its edge: the ground plane
-  drifts and breathes. It is the only screen with no data to show and nothing to
-  interrupt. A light used to travel the border of the window as well — `BorderBeam`,
-  from Magic UI — and it was removed: on the one screen that is nothing but four
-  fields, a second moving thing was one too many.
+- The sign in screen is the one exception, and it stops at its edge: dust drifts over
+  the page, joins into a faint net where points come close, and gathers towards the
+  pointer (`GravityParticles`), over a soft light behind the form (`.login-glow`). It
+  also follows the form, which is the only thing on the screen that happens: while a
+  sign in is being checked the dust is drawn in around the card and the light comes
+  up, and a refused one throws it off. It is the only screen with no data to show and
+  nothing to interrupt. It stood on an isometric plane of blocks before that, which
+  was taken out when the dust arrived: two moving backgrounds were one more than the
+  screen needed. A light used to travel the border of the window as well —
+  `BorderBeam`, from Magic UI — and it was removed: on the one screen that is nothing
+  but four fields, motion *on the form* was one too many. The dust is behind the form,
+  not on it, which is the line.
+
+  `GravityParticles` is the one animation in the application driven from script, so it
+  does by hand what the CSS rule does for everything else: under reduced motion it
+  draws once and stops, it stops while the tab is hidden, and it reads its colour from
+  `--acc` again whenever `data-theme` changes. A canvas and not elements, because
+  every point moves on every frame.
 - Loading is skeletons that hold the real row heights, so content never jumps. A
   blocking overlay is only for generating and publishing a plan.
 - Icons are `lucide-react`. No emoji, no icon fonts.

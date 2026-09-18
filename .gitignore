@@ -16,6 +16,7 @@ web/dist/
 /tmp/
 
 # Editors
+.claude/
 .idea/
 .vscode/
 *.iml
